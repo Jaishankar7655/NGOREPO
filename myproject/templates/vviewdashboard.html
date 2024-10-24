@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointment Letters Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .dashboard {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        border: 1px solid #ccc;
+        text-align: left;
+      }
+
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+
+      td button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-right: 5px;
+      }
+
+      td button:hover {
+        background-color: #218838;
+      }
+
+      td button.download {
+        background-color: #007bff;
+      }
+
+      td button.download:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard">
+      <h1>My Appointment Letters</h1>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search Letters..."
+        onkeyup="searchLetters()"
+      />
+      <table id="letterTable">
+        <thead>
+          <tr>
+            <th>Letter Name</th>
+            <th>Uploaded Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Appointment letters will be populated here -->
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const letters = [
+          {
+            name: "Appointment Letter 1",
+            date: "2024-01-01",
+            url: "path/to/letter1.pdf",
+          },
+          {
+            name: "Appointment Letter 2",
+            date: "2024-02-15",
+            url: "path/to/letter2.pdf",
+          },
+          {
+            name: "Appointment Letter 3",
+            date: "2024-03-20",
+            url: "path/to/letter3.pdf",
+          },
+        ];
+
+        const tableBody = document.querySelector("#letterTable tbody");
+
+        // Function to display letters
+        function displayLetters(lettersToDisplay) {
+          tableBody.innerHTML = ""; // Clear existing rows
+          lettersToDisplay.forEach((letter) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${letter.name}</td>
+              <td>${letter.date}</td>
+              <td>
+                  <button onclick="viewLetter('${letter.url}')">View</button>
+                  <button class="download" onclick="downloadLetter('${letter.url}')">Download</button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        }
+
+        // Display all letters initially
+        displayLetters(letters);
+
+        // Search function
+        window.searchLetters = function () {
+          const query = document
+            .getElementById("searchInput")
+            .value.toLowerCase();
+          const filteredLetters = letters.filter((letter) =>
+            letter.name.toLowerCase().includes(query)
+          );
+          displayLetters(filteredLetters);
+        };
+      });
+
+      function viewLetter(url) {
+        window.open(url, "_blank");
+      }
+
+      function downloadLetter(url) {
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = url.split("/").pop(); // Extract the filename
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    </script>
+  </body>
+</html>

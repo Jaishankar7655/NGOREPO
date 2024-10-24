@@ -1,0 +1,100 @@
+<!-- appointments/templates/letter.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointment Letter</title>
+    <link rel="stylesheet" href="{% static 'css/appointment.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container" id="content">
+        <div class="watermark">
+            <img src="{% static 'images/logo.png'%}" alt="Watermark" />
+        </div>
+
+        <div class="header">
+            <div class="logo-img"><img src="{% static 'images/logo.png'%}" alt="Logo" /></div>
+            <div class="header-content">
+                <h1>अघोर अखाडा ज्योतिष पीठ उज्जैन</h1>
+                <h2>चक्रतीर्थ शमशान उज्जैन</h2>
+            </div>
+        </div>
+        <div class="sarkar"><h2>भारत सरकार द्वारा मान्यता प्राप्त</h2></div>
+        <div class="registration">
+            <div class="number"><div>रजिस्ट्रेशन नंबर: 07/33/01/18822/24</div></div>
+            <div class="number1"><div>Date: {{ appointment.registration_date }}</div></div>
+            <div><img src="{% static 'images/baba.jpg'%}" alt="" /></div>
+        </div>
+        <div class="letter-number">पत्र क्र: {{ appointment.letter_number }}</div>
+
+        <div class="appointment-section">नियुक्ति पत्र</div>
+
+        <div class="personal-info">
+            <div>
+                <p>नाम: {{ appointment.name }}</p>
+                <p>गुरु/पिता/पति: {{ appointment.guru_father_husband }}</p>
+                <p>पता: {{ appointment.address }}</p>
+                <p>मोबाइल नंबर: {{ appointment.mobile_number }}</p>
+                <p>आधार नंबर: {{ appointment.aadhaar_number }}</p>
+            </div>
+            <div class="profile-picture">
+                <img src="{{ appointment.profile_picture.url }}" alt="Profile Picture" />
+            </div>
+        </div>
+
+        <div class="message">
+            <p>महोदय,</p>
+            <p>आपको यह जानकर अति हर्ष होगा कि अघोर अखाड़ा ज्योतिष पीठ उज्जैन के सभी सम्मानित पदाधिकारियों की सर्वसम्मति से आपको {{ appointment.position }} के पद पर नियुक्त किया जाता है।</p>
+            <p>अखाड़े को पूर्ण विश्वास है कि आप अपने पद पर निष्ठा पूर्वक व ईमानदारी से कार्य करते हुए अखाड़े के प्रचार-प्रसार, गौ सेवा, अघोर विद्या, ज्योतिष विद्या, योग प्राणायाम आदि कर्तव्यों का निर्वहन समाज व जनकल्याण के लिए करेंगे। आपके द्वारा किए गए कार्यों को अखाड़े के वरिष्ठ पदाधिकारियों को समय-समय पर अवगत कराते रहेंगे।</p>
+            <div class="redbox">
+                <p>अनुशासनहीनता, भ्रष्‍टाचार या किसी भी प्रकार से अखाड़े के नियमों का उल्लंघन करते पाए जाने पर अखाड़े के वरिष्ठ पदाधिकारियों को आपकी सदस्यता समाप्त करने का पूर्ण अधिकार सुरक्षित है।</p>
+                <div class="footer-content">
+                    <p>अघोर अखाडा ज्योतिष पीठ उज्जैन आपको उज्जवल भविष्य की कामना करता है।</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-signature">
+            <div><img src="{% static 'images/sign.png'%}" alt="Signature 1" /></div>
+            <div><img src="{% static 'images/sign 2.png'%}" alt="Signature 2" /></div>
+            <div><img src="{% static 'images/seal 3.png'%}" alt="Seal" /></div>
+        </div>
+    </div>
+    <div class="download-button">
+        <button onclick="downloadPDF()">Download PDF</button>
+    </div>
+
+    <script>
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+
+            html2canvas(document.querySelector("#content")).then(canvas => {
+                const doc = new jsPDF('p', 'pt', 'a4');
+                const imgData = canvas.toDataURL('image/png');
+
+                const imgWidth = 595.28; 
+                const pageHeight = 841.89;
+                const imgHeight = canvas.height * imgWidth / canvas.width;
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+
+                while (heightLeft >= 0) {
+                    position = heightLeft - imgHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                doc.save('appointment_letter.pdf');
+            });
+        }
+    </script>
+</body>
+</html>

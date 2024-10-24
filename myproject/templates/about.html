@@ -1,0 +1,40 @@
+{% load static   %}
+<!DOCTYPE html>
+<html lang="hi">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>तंत्र मंत्र कार्ड्स</title>
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+  </head>
+  <body>
+    {% include 'Nav.html' %}
+    <div class="about-container" id="cardContainer"></div>
+    <script>
+      const cards = [
+        { icon: "🐄", title: "गौशाला" },
+        { icon: "🕉️", title: "तंत्र मंत्र यंत्र" },
+        { icon: "🧘", title: "सिद्धि साधना" },
+        { icon: "🧘‍♂️", title: "योग प्राणायाम" },
+        { icon: "🖐️", title: "अघोर विद्या" },
+        { icon: "🔮", title: "वाममार्गी साधना" },
+        { icon: "📖", title: "कापालिक विद्या" },
+        { icon: "🧠", title: "ध्यान, नियम, संयम, समाधि" },
+        { icon: "🌟", title: "ज्योतिष विद्या" },
+        { icon: "🏫", title: "प्रशिक्षण केंद्र" },
+      ];
+
+      const aboutContainer = document.getElementById("cardContainer");
+
+      cards.forEach((card) => {
+        const cardElement = document.createElement("div");
+        cardElement.className = "card";
+        cardElement.innerHTML = `
+          <div class="icon">${card.icon}</div>
+          <div class="title">${card.title}</div>
+        `;
+        aboutContainer.appendChild(cardElement);
+      });
+    </script>
+    {% include 'footer.html' %}
+  </body>
+</html>

@@ -1,0 +1,289 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ school }} - Student ID Card</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+      :root {
+        --primary-color: #3498db;
+        --secondary-color: #2980b9;
+      }
+
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: "Poppins", sans-serif;
+        background-color: #f0f0f0;
+      }
+
+      .dashboard-container {
+        display: flex;
+        height: 100%;
+      }
+
+      .content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .id-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+        padding: 20px;
+      }
+
+      .id-card {
+        width: 400px;
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        color: #333;
+      }
+
+      .card-header {
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+      }
+
+      .card-header .school-logo img {
+        width: 60px;
+        height: auto;
+        position: absolute;
+        left: 20px;
+        
+      }
+
+      .card-header h1 {
+        margin: 10px 0;
+        font-size: 26px;
+        position: relative;
+        left: 30px;
+      }
+
+      .card-header p {
+        font-size: 14px;
+        margin: 5px 0;
+        position: relative;
+        left: 30px;
+      }
+
+      .card-body {
+        padding: 20px;
+        text-align: center;
+      }
+
+      .profile-photo img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 3px solid var(--primary-color);
+        object-fit: cover;
+        margin-bottom: 15px;
+      }
+
+      .student-name {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .details {
+        text-align: left;
+        font-size: 14px;
+      }
+
+      .details p {
+        margin: 5px 0;
+      }
+
+      .card-footer {
+        background-color: var(--primary-color);
+        color: white;
+        text-align: center;
+        padding: 15px;
+        font-size: 12px;
+      }
+
+      .back-btn,
+      .download-btn {
+        position: fixed;
+        right: 20px;
+        padding: 10px 20px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+      }
+
+      .back-btn {
+        top: 20px;
+      }
+
+      .download-btn {
+        bottom: 20px;
+      }
+
+      .back-btn:hover,
+      .download-btn:hover {
+        background-color: var(--secondary-color);
+      }
+
+      @media (max-width: 480px) {
+        .id-card {
+          width: 100%;
+        }
+        .back-btn,
+        .download-btn {
+          position: static;
+          display: block;
+          width: 100%;
+          margin-top: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard-container">
+      {% include 'sidenav.html' %}
+      <div class="content">
+        <button class="back-btn" onclick="history.back()">Back</button>
+        <div class="id-container">
+          <div class="id-card" id="id-card-container">
+            <div class="card-header">
+              <div class="school-logo">
+                <img src="{% static 'images/logo.png' %}" alt="School Logo" />
+              </div>
+              <h1 class="school-name">अघोर अखाड़ा ज्योतिष पीठ</h1>
+              <p class="school-info">
+                {{ school_address }} | Phone: {{ school_phone }}
+              </p>
+            </div>
+
+            <div class="card-body">
+              <div class="profile-photo">
+                {% if photo %}
+                <img src="{{ photo }}" alt="Profile Photo" />
+                {% else %}
+                <img
+                  src="{% static 'images/default_photo.png' %}"
+                  alt="Default Photo"
+                />
+                {% endif %}
+              </div>
+              <h2 class="student-name">{{ name }}</h2>
+              <div class="details">
+                <p>
+                  <strong>Father's Name:</strong> <span>{{ father_name }}</span>
+                </p>
+                <p>
+                  <strong>Mother's Name:</strong> <span>{{ mother_name }}</span>
+                </p>
+                <p><strong>Mobile:</strong> <span>{{ mobile }}</span></p>
+                <p><strong>Address:</strong> <span>{{ address }}</span></p>
+                <p>
+                  <strong>Registration Date:</strong>
+                  <span>{{ registration_date|date:"F d, Y" }}</span>
+                </p>
+              </div>
+            </div>
+
+            <div class="card-footer">
+              <p>NGO Management System</p>
+            </div>
+          </div>
+        </div>
+
+        <button class="download-btn" onclick="downloadIDCard()">
+          Download ID Card
+        </button>
+      </div>
+    </div>
+
+    <script>
+      function downloadIDCard() {
+        const element = document.getElementById("id-card-container");
+        html2canvas(element, {
+          scale: 2,
+          useCORS: true,
+          logging: true,
+          onclone: function (clonedDoc) {
+            clonedDoc.getElementById("id-card-container").style.transform =
+              "scale(1)";
+          },
+        })
+          .then((canvas) => {
+            const image = canvas.toDataURL("image/png", 1.0);
+            const link = document.createElement("a");
+            link.download = "ID_Card_{{ name }}.png";
+            link.href = image;
+            link.click();
+          })
+          .catch((err) => {
+            console.error("Error generating ID card image:", err);
+            alert(
+              "There was an error generating the ID card image. Please try again."
+            );
+          });
+      }
+
+      // Ensure images are loaded before allowing download
+      window.onload = function () {
+        const images = document.querySelectorAll("img");
+        let loadedImages = 0;
+
+        images.forEach((img) => {
+          if (img.complete) {
+            loadedImages++;
+          } else {
+            img.addEventListener("load", () => {
+              loadedImages++;
+              if (loadedImages === images.length) {
+                document.querySelector(".download-btn").disabled = false;
+              }
+            });
+            img.addEventListener("error", () => {
+              loadedImages++;
+              if (loadedImages === images.length) {
+                document.querySelector(".download-btn").disabled = false;
+              }
+            });
+          }
+        });
+
+        if (loadedImages === images.length) {
+          document.querySelector(".download-btn").disabled = false;
+        } else {
+          document.querySelector(".download-btn").disabled = true;
+        }
+      };
+    </script>
+  </body>
+</html>
