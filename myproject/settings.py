@@ -30,6 +30,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+   
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -108,3 +109,9 @@ PHONEPE_MERCHANT_ID = 'YOUR_MERCHANT_ID'
 PHONEPE_SALT_KEY = 'YOUR_SALT_KEY'
 PHONEPE_SALT_INDEX = 1
 SITE_URL = 'http://your-domain.com'  # Change this accordingly
+
+
+
+# settings.py
+SESSION_COOKIE_AGE = 1209600  # Set session expiration to 2 weeks
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session active even after closing the browser

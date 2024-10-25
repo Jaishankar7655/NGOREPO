@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png">
     <title>Appointment Letter</title>
     <link rel="stylesheet" href="{% static 'css/appointment.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet"/>
@@ -36,11 +37,11 @@
 
         <div class="personal-info">
             <div>
-                <p>नाम: {{ appointment.name }}</p>
-                <p>गुरु/पिता/पति: {{ appointment.guru_father_husband }}</p>
-                <p>पता: {{ appointment.address }}</p>
-                <p>मोबाइल नंबर: {{ appointment.mobile_number }}</p>
-                <p>आधार नंबर: {{ appointment.aadhaar_number }}</p>
+                <p>नाम: <b>{{ appointment.name }}</b></p>
+                <p>गुरु/पिता/पति: <b>{{ appointment.guru_father_husband }}</b></p>
+                <p>पता: <b>{{ appointment.address }}</b></p>
+                <p>मोबाइल नंबर: <b>{{ appointment.mobile_number }}</b></p>
+                <p>आधार नंबर: <b>{{ appointment.aadhaar_number }}</b></p>
             </div>
             <div class="profile-picture">
                 <img src="{{ appointment.profile_picture.url }}" alt="Profile Picture" />
@@ -49,7 +50,7 @@
 
         <div class="message">
             <p>महोदय,</p>
-            <p>आपको यह जानकर अति हर्ष होगा कि अघोर अखाड़ा ज्योतिष पीठ उज्जैन के सभी सम्मानित पदाधिकारियों की सर्वसम्मति से आपको {{ appointment.position }} के पद पर नियुक्त किया जाता है।</p>
+            <p>आपको यह जानकर अति हर्ष होगा कि अघोर अखाड़ा ज्योतिष पीठ उज्जैन के सभी सम्मानित पदाधिकारियों की सर्वसम्मति से आपको <b>{{ appointment.position }}</b> के पद पर नियुक्त किया जाता है।</p>
             <p>अखाड़े को पूर्ण विश्वास है कि आप अपने पद पर निष्ठा पूर्वक व ईमानदारी से कार्य करते हुए अखाड़े के प्रचार-प्रसार, गौ सेवा, अघोर विद्या, ज्योतिष विद्या, योग प्राणायाम आदि कर्तव्यों का निर्वहन समाज व जनकल्याण के लिए करेंगे। आपके द्वारा किए गए कार्यों को अखाड़े के वरिष्ठ पदाधिकारियों को समय-समय पर अवगत कराते रहेंगे।</p>
             <div class="redbox">
                 <p>अनुशासनहीनता, भ्रष्‍टाचार या किसी भी प्रकार से अखाड़े के नियमों का उल्लंघन करते पाए जाने पर अखाड़े के वरिष्ठ पदाधिकारियों को आपकी सदस्यता समाप्त करने का पूर्ण अधिकार सुरक्षित है।</p>
