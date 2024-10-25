@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aghori Babas of Ujjain - Fullscreen Slider</title>
+    <link rel="stylesheet" href="{% static 'css/slider.css' %}">
+</head>
+<body>
+    <div class="slider-container">
+        <div class="slide active">
+            <img src="{% static 'images/aghori1.png' %}" alt="Aghori Babas" />
+            <div class="slide-content">
+                <h2>Aghori Babas of Ujjain</h2>
+                <p>
+                    Aghori Babas are ascetic Shaiva sadhus known for their extreme and
+                    unconventional spiritual practices. Ujjain, a holy city in Madhya
+                    Pradesh, is one of the significant places where Aghori traditions
+                    have flourished.
+                </p>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="{% static 'images/rituals.png' %}" alt="Spiritual Practices" />
+            <div class="slide-content">
+                <h2>Spiritual Practices</h2>
+                <p>
+                    Aghoris in Ujjain are known for their intense meditation practices,
+                    often performed in cremation grounds. They believe in transcending
+                    the duality of life and death, seeking to attain spiritual
+                    enlightenment through unconventional means.
+                </p>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="{% static 'images/mahakaltemple.png' %}" alt="Mahakala Temple" />
+            <div class="slide-content">
+                <h2>Mahakala Temple</h2>
+                <p>
+                    The Mahakala Temple in Ujjain is a significant site for Aghori
+                    Babas. This ancient temple, dedicated to Lord Shiva, is one of the
+                    12 Jyotirlingas and holds great importance in Aghori traditions and
+                    practices.
+                </p>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="{% static 'images/rituals.png' %}" alt="Rituals and Customs" />
+            <div class="slide-content">
+                <h2>Rituals and Customs</h2>
+                <p>
+                    Aghori Babas in Ujjain perform various unique rituals, including the
+                    use of human ash, meditation with corpses, and consuming
+                    intoxicants. These practices are aimed at breaking societal taboos
+                    and achieving a state of non-duality.
+                </p>
+            </div>
+        </div>
+        <div class="slide">
+            <img src="{% static 'images/river.png' %}" alt="Modern Perceptions" />
+            <div class="slide-content">
+                <h2>Modern Perceptions</h2>
+                <p>
+                    While often misunderstood, Aghori Babas of Ujjain continue to
+                    fascinate both devotees and researchers. Their extreme practices
+                    challenge conventional notions of spirituality, offering a unique
+                    perspective on life, death, and the pursuit of enlightenment.
+                </p>
+            </div>
+        </div>
+        <div class="navigation"></div>
+        <div class="arrow arrow-left">&lt;</div>
+        <div class="arrow arrow-right">&gt;</div>
+        <div class="progress-bar"></div>
+    </div>
+
+    <script src="{% static 'javascript/slider.js' %}"></script>
+</body>
+</html>

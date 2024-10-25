@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --background-color: #ecf0f1;
+            --text-color: #333333;
+            --card-background: #ffffff;
+            --input-background: #f7f9fa;
+            --border-color: #bdc3c7;
+            --success-color: #2ecc71;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            background-color: var(--card-background);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 28px;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        h2 i {
+            font-size: 24px;
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            color: var(--secondary-color);
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            outline: none;
+            box-sizing: border-box;
+            background-color: var(--input-background);
+            color: var(--text-color);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-group .photo-preview {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .form-group .photo-preview img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group .photo-upload {
+            display: block;
+            margin-top: 10px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--accent-color);
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-link a {
+            text-decoration: none;
+            color: var(--secondary-color);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-link a:hover {
+            color: var(--accent-color);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+        }
+
+        .input-group input,
+        .input-group select {
+            padding-left: 40px;
+        }
+        img{
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2><i class="fas fa-user-edit"></i>Edit Profile</h2>
+    
+    <form action="{% url 'edit_profile' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="name" name="name" value="{{ name }}" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="email" name="email" value="{{ email }}" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mobile">Mobile Number</label>
+            <div class="input-group">
+                <i class="fas fa-mobile-alt"></i>
+                <input type="text" id="mobile" name="mobile" value="{{ mobile }}" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="father_name">Father's Name</label>
+            <div class="input-group">
+                <i class="fas fa-male"></i>
+                <input type="text" id="father_name" name="father_name" value="{{ father_name }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="mother_name">Mother's Name</label>
+            <div class="input-group">
+                <i class="fas fa-female"></i>
+                <input type="text" id="mother_name" name="mother_name" value="{{ mother_name }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <div class="input-group">
+                <i class="fas fa-venus-mars"></i>
+                <select id="gender" name="gender" required>
+                    <option value="male" {% if gender == "male" %}selected{% endif %}>Male</option>
+                    <option value="female" {% if gender == "female" %}selected{% endif %}>Female</option>
+                    <option value="other" {% if gender == "other" %}selected{% endif %}>Other</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="street">Street</label>
+            <div class="input-group">
+                <i class="fas fa-road"></i>
+                <input type="text" id="street" name="street" value="{{ street }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="city">City</label>
+            <div class="input-group">
+                <i class="fas fa-city"></i>
+                <input type="text" id="city" name="city" value="{{ city }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="postal_code">Postal Code</label>
+            <div class="input-group">
+                <i class="fas fa-mail-bulk"></i>
+                <input type="text" id="postal_code" name="postal_code" value="{{ postal_code }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="state">State</label>
+            <div class="input-group">
+                <i class="fas fa-map-marked-alt"></i>
+                <input type="text" id="state" name="state" value="{{ state }}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="country">Country</label>
+            <div class="input-group">
+                <i class="fas fa-globe-americas"></i>
+                <input type="text" id="country" name="country" value="{{ country }}">
+            </div>
+        </div>
+
+        <div class="form-group photo-preview">
+             <img src="{{ photo }}" alt="Profile Photo">
+        </div>
+        <div class="form-group">
+            <label for="photo">Upload New Photo</label>
+            <div class="input-group">
+                <i class="fas fa-camera"></i>
+                <input type="file" id="photo" name="photo" class="photo-upload">
+            </div>
+        </div>
+
+        <button type="submit"><i class="fas fa-save"></i> Update Profile</button>
+    </form>
+
+    <div class="back-link">
+        <a href="{% url 'profile' %}"><i class="fas fa-arrow-left"></i> Back to Profile</a>
+    </div>
+</div>
+
+</body>
+</html>
