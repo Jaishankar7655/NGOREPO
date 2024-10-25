@@ -242,8 +242,34 @@ def edit_profile(request):
         return render(request, 'edit_profile.html', context)
 
     return redirect('login')
-def certificate(request):
-    return render(request, 'Certificate.html')
+
+
+
+from django.shortcuts import render, get_object_or_404
+from App.models import Certificate
+
+def certificate_list(request):
+    search_query = request.GET.get('search', '')
+    certificates = Certificate.objects.filter(mobile_number__icontains=search_query) if search_query else None
+    return render(request, 'certificate_list.html', {'certificates': certificates, 'search_query': search_query})
+
+def certificate_detail(request):
+    mobile_number = request.GET.get('mobile_number')
+    if mobile_number:
+        certificate = get_object_or_404(Certificate, mobile_number=mobile_number)
+        context = {
+            'name': certificate.name,
+            'guardian': certificate.guardian,
+            'area': certificate.area,
+            'workarea': certificate.workarea,
+            'field': certificate.field,
+            'welfare_activity': certificate.welfare_activity,
+            'date': certificate.date,
+            'letter_number': certificate.letter_number
+        }
+        return render(request, 'certificate.html', context)
+    return redirect('certificate_list')
+
 
 
 # views.py

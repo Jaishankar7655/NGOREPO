@@ -11,11 +11,12 @@
       rel="stylesheet"
     />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-   
   </head>
   <body>
     <div class="certificate-container">
-      <div class="backbutton"><button>Back</button></div>
+      <div class="backbutton">
+        <button onclick="window.history.back()">Back</button>
+      </div>
       <div class="certificate" id="certificate">
         <img
           src="{% static 'images/logo.png' %}"
@@ -40,8 +41,8 @@
 
         <div class="header">
           <div class="reg">
-            <div class="num"    ><h1>मोक्ष धाम मृत्यु सत्य है</h1></div>
-            <div  ><h3>रजिस्ट्रेशन नंबर: 07/33/01/18822/24</h3></div>
+            <div class="num"><h1>मोक्ष धाम मृत्यु सत्य है</h1></div>
+            <div><h3>रजिस्ट्रेशन नंबर: 07/33/01/18822/24</h3></div>
           </div>
           <p>पंजी.सं. 123/18</p>
           <h2>अघोर अखाड़ा ज्योतिष पीठ उज्जैन</h2>
@@ -51,25 +52,18 @@
         <h1 class="title">सम्मान पत्र</h1>
 
         <div class="content">
-          <p>
-          <div class="date-head" >
-            <div>  <b>दिनांक:</b> <span class="fillable">{{ date }}</span></div>
-            <div><b>पत्रांक:</b><span class="fillable">{{ letter_number }}</span></div>
+          <div class="date-head">
+            <div><b>दिनांक:</b> <span class="fillable">{{ date }}</span></div>
+            <div><b>पत्रांक:</b> <span class="fillable">{{ letter_number }}</span></div>
           </div>
-            
+          <p>
+            श्री/सुश्री <span class="fillable">{{ name }}</span> गुरु/पिता/पति <span class="fillable">{{ guardian }}</span>, 
+            पता <span class="fillable">{{ area }}</span>, आपके द्वारा अखाड़े राष्ट्र व समाज के लिए उत्कृष्ट कार्यों के लिए
+            आपको अखाड़े द्वारा सम्मान पत्र प्रदान किया जाता।
           </p>
           <p>
-            श्री/सुश्री <span class="fillable">{{ name }}</span> गुरु/पिता/पति <span class="fillable">{{ guardian }}</span>  पता <span class="fillable">{{ area  }}</span> 
-            आपके द्वारा अखाड़े राष्ट्र व समाज के लिए उत्कृष्ट कार्यो के लिए आपको अखाड़े द्वारा सम्मान पत्र प्रदान किया जाता |
-          </p>
-          <p>
-           <span class="fillable">{{ workarea  }}</span> आपके द्वारा क्षेत्र के लिए किए गए राष्ट्र व समाज कल्याड 
-          
-            आपके द्वारा, <span class="fillable">{{ field }}</span> क्षेत्र में
-            किए गए राष्ट्र व समाज
-            <span class="fillable">{{ welfare_activity }}</span> कल्याण के लिए
-            उत्कृष्ट कार्यों को सदैव याद रखा जाएगा व आप ऐसे ही आगे भी अपना
-            योगदान राष्ट्र व समाज के उत्थान के लिए करते रहें यही ईश्वर से
+            <span class="fillable">{{ workarea }}</span> क्षेत्र के लिए किए गए राष्ट्र व समाज कल्याण हेतु आपके कार्यों को 
+            सदैव याद रखा जाएगा। आप ऐसे ही आगे भी अपना योगदान राष्ट्र व समाज के उत्थान के लिए करते रहें, यही ईश्वर से 
             प्रार्थना है।
           </p>
         </div>
@@ -78,22 +72,33 @@
           <h2>आपके उज्जवल भविष्य की कामनाओं के साथ सप्रेम भेट</h2>
           <h3>अघोर अखाड़ा उज्जैन</h3>
         </div>
+        
         <div class="footer-signature">
-          <div><img src="{% static 'images/sign.png'%}" alt="Signature 1" /></div>
-          <div><img src="{% static 'images/sign 2.png'%}" alt="Signature 2" /></div>
-          <div><img src="{% static 'images/seal 3.png'%}" alt="Seal" /></div>
+          <div><img src="{% static 'images/sign.png' %}" alt="Signature 1" /></div>
+          <div><img src="{% static 'images/sign 2.png' %}" alt="Signature 2" /></div>
+          <div><img src="{% static 'images/seal 3.png' %}" alt="Seal" /></div>
+        </div>
       </div>
-      </div>
-      
     </div>
-
 
     <button class="download-button" onclick="confirmDownload()">
       डाउनलोड करें (Download)
     </button>
 
-<script src="{% static  'Javascript/certificate.js'  %}" >
+    <script>
+      // Function to download the certificate as a PDF
+      function confirmDownload() {
+        const certificateElement = document.getElementById("certificate");
+        const options = {
+          margin: 0.5,
+          filename: 'certificate.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
 
-</script>
+        html2pdf().set(options).from(certificateElement).save();
+      }
+    </script>
   </body>
 </html>

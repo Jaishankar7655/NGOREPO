@@ -133,3 +133,26 @@ class Donation(models.Model):
 
 
 
+
+
+
+
+# certificat/model
+
+
+# models.py
+from django.db import models
+
+class Certificate(models.Model):
+    name = models.CharField(max_length=100, verbose_name="नाम")
+    guardian = models.CharField(max_length=100, verbose_name="गुरु/पिता/पति")
+    area = models.CharField(max_length=200, verbose_name="पता")
+    workarea = models.CharField(max_length=200, verbose_name="कार्य क्षेत्र")
+    field = models.CharField(max_length=200, verbose_name="क्षेत्र")
+    welfare_activity = models.CharField(max_length=200, verbose_name="कल्याण कार्य")
+    date = models.DateField(verbose_name="तारीख")
+    letter_number = models.CharField(max_length=50, verbose_name="पत्र क्रमांक")
+    mobile_number = models.CharField(max_length=15, unique=True, verbose_name="मोबाइल नंबर")
+    
+    def __str__(self):
+        return self.name
