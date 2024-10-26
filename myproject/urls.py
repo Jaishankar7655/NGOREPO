@@ -20,9 +20,9 @@ urlpatterns = [
     path('certificates/', views.certificate_list, name='certificate_list'),
     path('certificate/', views.certificate_detail, name='certificate'),   # Registration route
     path('appointment/', views.appointment, name='appointment'),   # Registration route
-    path('servicedetails/' , views.servicedetails, name='servicedetails'),
-     path('process-donation/', views.process_donation, name='process_donation'),
+    path('servicedetails/', views.servicedetails, name='servicedetails'),
     path('login/', views.login_view, name='login'),
+    path('logout/', views.logout, name='logout'),
 ]
 
 

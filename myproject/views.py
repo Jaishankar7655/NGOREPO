@@ -6,6 +6,25 @@ import mysql.connector
 from App.models import Image, YouTubeTestimonial
 from django.utils.translation import gettext as _
 
+
+
+
+
+# Add this at the top of views.py
+from functools import wraps
+from django.shortcuts import redirect
+
+def login_required(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if 'username' not in request.session:
+            return redirect('login')
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
+
+
+
+
 # Database connection
 db = mysql.connector.connect(host='localhost', user='root', passwd='', database='ngo')
 cr = db.cursor()
@@ -82,6 +101,9 @@ def register(request):
     return render(request, 'register.html')
 
 def login_view(request):
+    if request.session.get('username'):
+        return redirect('dashboard')  # Redirect to dashboard if already logged in
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -106,6 +128,7 @@ def login_view(request):
 
     return render(request, 'login.html')
 
+@login_required
 def dashboard(request):
     username = request.session.get('username')
     if username:
@@ -129,7 +152,7 @@ def dashboard(request):
             return render(request, 'dashboard.html', context)
 
     return redirect('login')
-
+@login_required
 def idcard(request):
     username = request.session.get('username')
     if username:
@@ -152,7 +175,7 @@ def idcard(request):
             return render(request, 'card.html', context)
 
     return redirect('login')
-
+@login_required
 def profile(request):
     username = request.session.get('username')
     if username:
@@ -175,7 +198,7 @@ def profile(request):
             return render(request, 'profile.html', context)
 
     return redirect('login')
-
+@login_required
 def edit_profile(request):
     username = request.session.get('username')
     if not username:
@@ -247,12 +270,12 @@ def edit_profile(request):
 
 from django.shortcuts import render, get_object_or_404
 from App.models import Certificate
-
+@login_required
 def certificate_list(request):
     search_query = request.GET.get('search', '')
     certificates = Certificate.objects.filter(mobile_number__icontains=search_query) if search_query else None
     return render(request, 'certificate_list.html', {'certificates': certificates, 'search_query': search_query})
-
+@login_required
 def certificate_detail(request):
     mobile_number = request.GET.get('mobile_number')
     if mobile_number:
@@ -276,7 +299,7 @@ def certificate_detail(request):
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from App.models import Appointment
-
+@login_required
 def appointment(request):
     search_query = request.GET.get('search', '')  # Get search query (mobile number)
     appointment_id = request.GET.get('id')  # Check if the "view" button is clicked
@@ -301,7 +324,7 @@ def appointment(request):
     })
 
 
-
+@login_required
 # Add a new view for downloading
 def appointment_download(request, id):
     appointment = get_object_or_404(Appointment, id=id)
@@ -316,116 +339,15 @@ def servicedetails(request):
     return render(request, 'servicedetails.html')
 
 
+def logout(request):
+    if 'username' in request.session:
+        del request.session['username']
+    return redirect('home')
 
 
-# views.py
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_protect
-from django.conf import settings
-from App.models import Donation
-import uuid
-import json
-import base64
-import hashlib
-import requests
 
-def donation_page(request):
-    return render(request, 'donations/donation.html')
 
-@csrf_protect
-def process_donation(request):
-    if request.method == 'POST':
-        try:
-            # Create donation record
-            donation = Donation.objects.create(
-                name=request.POST.get('name'),
-                email=request.POST.get('email'),
-                mobile=request.POST.get('mobile'),
-                amount=float(request.POST.get('amount')),
-                address=request.POST.get('address'),
-                bank_name=request.POST.get('bank_name'),
-                account_number=request.POST.get('account_number'),
-                transaction_id=f"TXN_{uuid.uuid4().hex[:20]}",
-                merchant_transaction_id=f"MERCH_{uuid.uuid4().hex[:20]}",
-                payment_status='PENDING'
-            )
 
-            # PhonePe payment integration
-            phonepe = PhonePePayment()
-            payload = phonepe.generate_payload(donation)
-            
-            # Make request to PhonePe
-            response = requests.post(
-                phonepe.api_endpoint,
-                json={"request": payload['payload']},
-                headers={
-                    'Content-Type': 'application/json',
-                    'X-VERIFY': payload['hash']
-                }
-            )
-            
-            response_data = response.json()
-            
-            if response_data.get('success'):
-                # Update donation with payment details
-                donation.payment_response = response_data
-                donation.save()
-                
-                return JsonResponse({
-                    'success': True,
-                    'redirect_url': response_data['data']['instrumentResponse']['redirectInfo']['url']
-                })
-            else:
-                raise Exception(response_data.get('message', 'Payment initiation failed'))
 
-        except Exception as e:
-            return JsonResponse({
-                'success': False,
-                'error': str(e)
-            }, status=400)
 
-    return JsonResponse({
-        'success': False,
-        'error': 'Invalid request method'
-    }, status=405)
 
-class PhonePePayment:
-    def __init__(self):
-        self.merchant_id = settings.PHONEPE_MERCHANT_ID
-        self.salt_key = settings.PHONEPE_SALT_KEY
-        self.salt_index = settings.PHONEPE_SALT_INDEX
-        
-        if settings.DEBUG:
-            self.api_endpoint = "https://api-preprod.phonepe.com/apis/pg-sandbox/pg/v1/pay"
-        else:
-            self.api_endpoint = "https://api.phonepe.com/apis/hermes/pg/v1/pay"
-
-    def generate_payload(self, donation):
-        payload = {
-            "merchantId": self.merchant_id,
-            "merchantTransactionId": donation.merchant_transaction_id,
-            "merchantUserId": f"MUID_{donation.id}",
-            "amount": int(donation.amount * 100),  # Convert to paisa
-            "redirectUrl": f"{settings.SITE_URL}/payment/callback/",
-            "redirectMode": "POST",
-            "callbackUrl": f"{settings.SITE_URL}/api/payment/callback/",
-            "paymentInstrument": {
-                "type": "PAY_PAGE"
-            }
-        }
-        
-        base64_payload = base64.b64encode(json.dumps(payload).encode()).decode()
-        
-        # Generate hash
-        string_to_hash = base64_payload + "/pg/v1/pay" + self.salt_key
-        sha256_hash = hashlib.sha256(string_to_hash.encode('utf-8')).hexdigest()
-        hash_value = f"{sha256_hash}###{self.salt_index}"
-        
-        return {
-            'payload': base64_payload,
-            'hash': hash_value
-        }
-    
-
-    

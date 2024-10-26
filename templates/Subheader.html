@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png">
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
@@ -23,13 +23,25 @@
           <div class="subheader-logo">
             <img src="{% static 'images/logo.png' %}" alt="Logo" />
           </div>
-          <div class="sub-title" style="font-size: 2em;">अघोर अखाड़ा ज्योतिष पीठ उज्जैन</div>
-          <div class="membership-btn" >
+          <div class="sub-title" style="font-size: 2em">
+            अघोर अखाड़ा ज्योतिष पीठ उज्जैन
+          </div>
+          <div class="membership-btn">
             <div>
-              <a href="{% url 'register' %}"><button>Apply for membership</button></a>
+              <a href="{% url 'register' %}"
+                ><button>Apply for membership</button></a
+              >
             </div>
             <div>
-              <a href="{% url 'login' %}"><button>Login</button></a>
+              {% if request.session.username %}
+              <a href="{% url 'dashboard' %}"
+                ><button><i class="fas fa-user-circle"></i>&nbsp;&nbsp;Dashboard</button
+              ></a>
+              {% else %}
+              <a href="{% url 'login' %}"
+                ><button><i class="fas fa-user-circle"></i>&nbsp;&nbsp;Login</button
+              ></a>
+              {% endif %}
             </div>
           </div>
         </div>

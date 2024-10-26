@@ -4,148 +4,8 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ujjain Spiritual Facilities</title>
-    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png">
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #121212;
-        color: #ffffff;
-        line-height: 1.6;
-      }
-
-      h1 {
-        text-align: center;
-        margin: 20px 0 30px;
-        color: #ff8c00;
-      }
-
-      .scroll-container {
-        position: relative;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-      }
-
-      .scroll-service-container {
-        display: flex;
-        gap: 20px;
-        overflow-x: auto;
-        padding: 10px 0;
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-        scrollbar-width: none; /* Firefox */
-        cursor: grab;
-      }
-
-      .scroll-service-container:active {
-        cursor: grabbing;
-      }
-
-      /* Hide scrollbar for Chrome, Safari, and newer versions of Edge */
-      .scroll-service-container::-webkit-scrollbar {
-        display: none;
-      }
-
-      .scroll-card {
-        background: linear-gradient(135deg, #4a90e2, #6c845d);
-        border-radius: 15px;
-        padding: 20px;
-        text-align: center;
-        min-width: 280px;
-        width: 280px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .scroll-card:hover {
-        transform: translateY(-5px);
-      }
-
-      .scroll-icon {
-        font-size: 50px;
-        margin-bottom: 5px;
-      }
-
-      .scroll-title {
-        font-size: 18px;
-        font-weight: bold;
-        color: #ffffff;
-        margin-bottom: 5px;
-      }
-
-      .scroll-description {
-        color: #f0f0f0;
-        font-size: 14px;
-        line-height: 1.4;
-        overflow-y: auto;
-        max-height: 150px;
-        padding-right: 5px;
-      }
-
-      .scroll-description::-webkit-scrollbar {
-        width: 4px;
-      }
-
-      .scroll-description::-webkit-scrollbar-thumb {
-        background-color: rgba(255, 255, 255, 0.3);
-        border-radius: 2px;
-      }
-
-      .scroll-btn {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: #ff8c00;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-        cursor: pointer;
-        z-index: 10;
-        transition: background-color 0.3s ease, opacity 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .scroll-btn:hover {
-        background-color: #ff6500;
-      }
-
-      .scroll-btn.left-btn {
-        left: 0;
-      }
-
-      .scroll-btn.right-btn {
-        right: 0;
-      }
-
-      @media (max-width: 768px) {
-        .scroll-container {
-          padding: 0 10px;
-        }
-
-        .scroll-card {
-          min-width: 260px;
-          width: 260px;
-        }
-
-        .scroll-btn {
-          display: none; /* Hide buttons on mobile */
-        }
-      }
-    </style>
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png" />
+    <link rel="stylesheet" href="{% static 'css/scrollservice.css' %}" />
   </head>
   <body>
     <h1 style="text-align: center; color: #b74841">Our services</h1>
@@ -160,60 +20,70 @@
     <script>
       const facilities = [
         {
+          id: 1,
           icon: "🐄",
           title: "गौशाला (Goshala)",
           description:
             "Caring for cows is an integral part of Ujjain's spiritual ethos. Here, you can learn about the importance of cow protection, engage in nurturing these sacred animals, and participate in programs that promote their welfare.",
         },
         {
+          id: 2,
           icon: "🕉️",
           title: "तंत्र मंत्र यंत्र (Tantra Mantra Yantra)",
           description:
             "Delve into the ancient practices of tantra and mantra. Ujjain offers workshops where you can learn powerful rituals, their significance, and how to incorporate these practices into your spiritual journey.",
         },
         {
+          id: 3,
           icon: "🧘",
           title: "सिद्धि साधना (Siddhi Sadhana)",
           description:
             "Achieve spiritual powers through dedicated practices. Ujjain provides a conducive environment for seekers to engage in deep meditation, explore siddhis, and realize their inner potential.",
         },
         {
+          id: 4,
           icon: "🧘‍♂️",
           title: "योग प्राणायाम (Yoga Pranayama)",
           description:
             "Ujjain is a sanctuary for yoga enthusiasts. Join various classes that focus on physical postures, breathing techniques, and meditation, all aimed at enhancing your overall well-being and spiritual growth.",
         },
         {
+          id: 5,
           icon: "🖐️",
           title: "अघोर विद्या (Aghor Vidya)",
           description:
             "Aghor Vidya offers a unique perspective on spirituality. This practice invites you to explore the mysteries of life and death through intense rituals and teachings that challenge conventional beliefs.",
         },
         {
+          id: 6,
           icon: "🔮",
           title: "वाममार्गी साधना (Vamachari Sadhana)",
           description:
             "For those seeking deeper truths, Vamachari Sadhana explores left-hand tantra practices. Ujjain offers guidance and teachings that balance material and spiritual pursuits, catering to serious seekers.",
         },
         {
+          id: 7,
           icon: "📖",
           title: "कापालिक विद्या (Kapalik Vidya)",
           description:
             "Learn about the Kapalika sect's practices, which involve intense rituals and meditative techniques aimed at spiritual transformation. Ujjain provides access to knowledgeable practitioners in this niche area.",
         },
         {
+          id: 8,
           icon: "🧠",
           title: "ध्यान, नियम, संयम, समाधि (Dhyana, Niyam, Sanyam, Samadhi)",
           description:
             "Meditation and self-discipline are vital for attaining higher consciousness. Ujjain's centers offer structured programs to deepen your practice and foster inner peace and tranquility.",
         },
         {
+          id: 9,
           icon: "🌟",
           title: "ज्योतिष विद्या (Jyotish Vidya)",
           description:
             "Astrology is a significant aspect of Ujjain's spiritual landscape. Visitors can consult experienced astrologers for insights into their lives and futures, and participate in workshops to learn Jyotish.",
         },
         {
+          id: 10,
           icon: "🏫",
           title: "प्रशिक्षण केंद्र (Prashikshan Kendra)",
           description:
@@ -233,12 +103,11 @@
           const card = document.createElement("div");
           card.className = "scroll-card";
           card.innerHTML = `
-                    <a>
-                    <div class="scroll-icon">${facility.icon}</div>
-                    <div class="scroll-title">${facility.title}</div>
-                    <div class="scroll-description">${facility.description}</div>
-                    </a>
-                `;
+    <a href="{% url 'servicedetails' %}?id=${facility.id}">
+      <div class="scroll-icon">${facility.icon}</div>
+      <div class="scroll-title">${facility.title}</div>
+    </a>
+  `;
           container.appendChild(card);
         });
 

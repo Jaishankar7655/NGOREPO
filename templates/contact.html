@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="images/logo.png" type="image/png" />
+    <title>Contact Us</title>
+    <style>
+      /* Reuse existing styles from the donation form */
+      :root {
+        --primary-color: white;
+        --secondary-color: #e74c3c;
+        --background-color: #2c3e50;
+        --text-color: white;
+        --error-color: #ff6b6b;
+        --success-color: #2ecc71;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: var(--background-color);
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+        line-height: 1.6;
+      }
+
+      .contact-container .container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+      }
+
+      .contact-container .contact-form {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+      }
+
+      .contact-container .form-header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .contact-container .form-header h1 {
+        color: var(--primary-color);
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .contact-container .form-header p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1.1em;
+      }
+
+      .contact-container .form-group {
+        margin-bottom: 25px;
+        position: relative;
+      }
+
+      .contact-container label {
+        display: block;
+        margin-bottom: 8px;
+        color: var(--primary-color);
+        font-weight: 500;
+        font-size: 1.1em;
+      }
+
+      .contact-container input,
+      .contact-container textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        font-size: 16px;
+        background-color: rgba(255, 255, 255, 0.05);
+        color: white;
+        transition: all 0.3s ease;
+      }
+
+      .contact-container input:focus,
+      .contact-container textarea:focus {
+        outline: none;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-color: var(--secondary-color);
+        box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+      }
+
+      .contact-container .error-message {
+        color: var(--error-color);
+        font-size: 0.9em;
+        margin-top: 5px;
+        display: none;
+      }
+
+      .contact-container .submit-btn {
+        background-color: var(--secondary-color);
+        color: white;
+        padding: 16px 32px;
+        border: none;
+        border-radius: 8px;
+        font-size: 1.1em;
+        cursor: pointer;
+        width: 100%;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+      }
+
+      .contact-container .submit-btn:hover {
+        background-color: #c0392b;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+      }
+
+      .contact-container .submit-btn:active {
+        transform: translateY(0);
+      }
+
+      @media (max-width: 768px) {
+        .contact-container .container {
+          padding: 10px;
+          margin: 20px auto;
+        }
+
+        .contact-container .form-header h1 {
+          font-size: 2em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="contact-container">
+      <div class="container">
+        <div class="contact-form">
+          <div class="form-header">
+            <h1>Contact Us</h1>
+            <p>We'd love to hear from you!</p>
+          </div>
+
+          <form
+            id="contactForm"
+            action="https://formspree.io/f/myzykyll"
+            method="POST"
+          >
+            <div class="form-group">
+              <label for="contactName">Full Name *</label>
+              <input
+                type="text"
+                id="contactName"
+                name="contactName"
+                required
+                pattern="^[A-Za-z\s]{3,50}$"
+                title="Please enter a valid name (3-50 characters, letters only)"
+              />
+              <div class="error-message" id="nameContactError"></div>
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">Email Address *</label>
+              <input
+                type="email"
+                id="contactEmail"
+                name="contactEmail"
+                required
+              />
+              <div class="error-message" id="emailContactError"></div>
+            </div>
+            <div class="form-group">
+              <label for="message">Message *</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                required
+              ></textarea>
+              <div class="error-message" id="messageError"></div>
+            </div>
+            <div class="form-group">
+              <button type="submit" class="submit-btn">Send Message</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
