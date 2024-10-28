@@ -1,5 +1,4 @@
 from pathlib import Path
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +29,6 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-   
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -39,7 +37,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'],  # Use pathlib for paths
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -59,10 +57,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ngo',
-        'USER': 'root',                   # Replace with your MySQL username
-        'PASSWORD': '',                   # Replace with your MySQL password
-        'HOST': 'localhost',              # or your database host
-        'PORT': '3306',                   # default MySQL port
+        'USER': 'root',  # Replace with your MySQL username
+        'PASSWORD': '',  # Replace with your MySQL password
+        'HOST': 'localhost',  # or your database host
+        'PORT': '3306',  # default MySQL port
     }
 }
 
@@ -91,27 +89,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    BASE_DIR / 'static',  # Use pathlib for paths
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # Use pathlib for paths
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Media files configuration
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / 'media'  # Use pathlib for paths
 
-# Add the following line to serve media files in development
-
-
-# Add your PhonePe configuration
-PHONEPE_MERCHANT_ID = 'YOUR_MERCHANT_ID'
-PHONEPE_SALT_KEY = 'YOUR_SALT_KEY'
-PHONEPE_SALT_INDEX = 1
-SITE_URL = 'http://your-domain.com'  # Change this accordingly
-
-
-
-# settings.py
-SESSION_COOKIE_AGE = 1209600  # Set session expiration to 2 weeks
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # Keep session active even after closing the browser
+# Session configuration
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 30 * 24 * 60 * 60  # 30 days

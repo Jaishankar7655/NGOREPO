@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png">
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png" />
     <title>सम्मान पत्र सूची</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;700&display=swap"
@@ -215,7 +215,6 @@
               <td>{{ certificate.name }}</td>
               <td>{{ certificate.mobile_number }}</td>
               <td>{{ certificate.letter_number }}</td>
-              <!-- In certificate_list.html, modify the action-buttons td -->
               <td class="action-buttons">
                 <a
                   href="{% url 'certificate' %}?mobile_number={{ certificate.mobile_number }}"

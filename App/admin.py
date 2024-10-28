@@ -32,6 +32,7 @@ class AppointmentAdmin(admin.ModelAdmin):
 
 
 # admin.py
+# admin.py
 from django.contrib import admin
 from .models import Certificate
 
@@ -39,6 +40,10 @@ from .models import Certificate
 class CertificateAdmin(admin.ModelAdmin):
     list_display = ('name', 'mobile_number', 'letter_number', 'date')
     search_fields = ('name', 'mobile_number', 'letter_number')
+
+
+
+
 
 
 

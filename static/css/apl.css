@@ -1,0 +1,145 @@
+:root {
+    --primary-color: white;
+    --secondary-color: #e74c3c;
+    --background-color: #2c3e50;
+    --text-color: white;
+    --error-color: #ff6b6b;
+    --success-color: #2ecc71;
+  }
+
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+
+  .appointment-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+  }
+
+  .appointment-form {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+  }
+
+  .form-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .form-header h1 {
+    color: var(--primary-color);
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .form-header p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1em;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+    position: relative;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--primary-color);
+    font-weight: 500;
+    font-size: 1.1em;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    transition: all 0.3s ease;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+  }
+
+  .error-message {
+    color: var(--error-color);
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: none;
+  }
+
+  .submit-btn {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 16px 32px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+  }
+
+  .submit-btn:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
+  }
+
+  .submit-btn:active {
+    transform: translateY(0);
+  }
+
+  .profile-upload {
+    display: none;
+  }
+
+  .upload-label {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .upload-label:hover {
+    background-color: #c0392b;
+  }
+
+  @media (max-width: 768px) {
+    .appointment-container {
+      padding: 10px;
+      margin: 20px auto;
+    }
+
+    .form-header h1 {
+      font-size: 2em;
+    }
+  }

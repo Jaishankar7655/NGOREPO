@@ -17,10 +17,11 @@ urlpatterns = [
     path('IDcard'  , views.idcard , name='card'),   # Registration route
     path('profile'  , views.profile , name='profile'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),   # Registration route
-    path('certificates/', views.certificate_list, name='certificate_list'),
-    path('certificate/', views.certificate_detail, name='certificate'),   # Registration route
+    path('certificate/', views.certificate, name='certificate'),   # Registration route
     path('appointment/', views.appointment, name='appointment'),   # Registration route
-    path('servicedetails/', views.servicedetails, name='servicedetails'),
+    path('certificate_list' , views.certificate_list, name='certificate_list'),
+    path('servicedetails/' , views.servicedetails, name='servicedetails'),
+    path('ApplicationForAppointment/' , views.apl, name='apl'), #
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout, name='logout'),
 ]

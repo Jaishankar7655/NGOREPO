@@ -55,6 +55,8 @@ class Register(models.Model):
     password = models.CharField(max_length=255)
     registration_date = models.DateTimeField(auto_now_add=True)
 
+
+
 # models.py
 from django.db import models
 from django.utils import timezone
@@ -80,6 +82,8 @@ class Appointment(models.Model):
 # admin.py
 
 
+
+
 # views.py
 from django.shortcuts import render, get_object_or_404
 from .models import Appointment
@@ -90,46 +94,6 @@ def appointment(request):
         return render(request, 'appointment.html', {'appointment': appointment})
     return render(request, 'appointment_list.html', {'appointments': Appointment.objects.all()})
 
-
-
-
-
-
-
-
-
-from django.db import models
-from django.utils import timezone
-
-class Donation(models.Model):
-    PAYMENT_STATUS_CHOICES = [
-        ('PENDING', 'Pending'),
-        ('SUCCESS', 'Success'),
-        ('FAILED', 'Failed')
-    ]
-
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    mobile = models.CharField(max_length=15)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    address = models.TextField()
-    bank_name = models.CharField(max_length=100)
-    account_number = models.CharField(max_length=50)
-    
-    # Payment specific fields
-    transaction_id = models.CharField(max_length=100, unique=True)
-    merchant_transaction_id = models.CharField(max_length=100, unique=True)
-    payment_status = models.CharField(
-        max_length=20, 
-        choices=PAYMENT_STATUS_CHOICES,
-        default='PENDING'
-    )
-    payment_response = models.JSONField(null=True, blank=True)
-    created_at = models.DateTimeField(default=timezone.now)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"{self.name} - {self.amount} - {self.payment_status}"
 
 
 

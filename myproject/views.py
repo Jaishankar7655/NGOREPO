@@ -5,23 +5,11 @@ from django.contrib.auth.hashers import make_password, check_password
 import mysql.connector
 from App.models import Image, YouTubeTestimonial
 from django.utils.translation import gettext as _
-
-
-
-
-
-# Add this at the top of views.py
 from functools import wraps
-from django.shortcuts import redirect
-
-def login_required(view_func):
-    @wraps(view_func)
-    def _wrapped_view(request, *args, **kwargs):
-        if 'username' not in request.session:
-            return redirect('login')
-        return view_func(request, *args, **kwargs)
-    return _wrapped_view
-
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 
 
@@ -29,6 +17,28 @@ def login_required(view_func):
 db = mysql.connector.connect(host='localhost', user='root', passwd='', database='ngo')
 cr = db.cursor()
 
+# Login Required Decorator
+def login_required(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if 'username' not in request.session:
+            # Store the intended URL in session
+            request.session['next'] = request.get_full_path()
+            messages.warning(request, 'Please login to access this page.')
+            return redirect('login')
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
+
+# Check if user is already logged in
+def check_logged_in(view_func):
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if 'username' in request.session:
+            return redirect('dashboard')
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view
+
+# Public views that don't require login
 def home(request):
     return render(request, 'home.html')
 
@@ -55,6 +65,14 @@ def testimonial_list(request):
     testimonials = YouTubeTestimonial.objects.all().order_by('-created_at')
     return render(request, 'testimonials.html', {'testimonials': testimonials})
 
+def apl(request):
+    return render(request, 'apl.html')
+
+def contact(request):
+    return render(request, 'contact.html')
+
+# Authentication views
+@check_logged_in
 def register(request):
     if request.method == 'POST':
         firstname = request.POST.get('name')
@@ -81,7 +99,9 @@ def register(request):
 
         try:
             insert_query = """INSERT INTO register 
-                              (name, email, mobile, username, password, mother_name, father_name, gender, street, city, postal_code, state, country, photo)
+                              (name, email, mobile, username, password, mother_name, 
+                               father_name, gender, street, city, postal_code, state, 
+                               country, photo)
                               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
             hashed_password = make_password(password)
             cr.execute(insert_query, (
@@ -100,13 +120,12 @@ def register(request):
 
     return render(request, 'register.html')
 
+@check_logged_in
 def login_view(request):
-    if request.session.get('username'):
-        return redirect('dashboard')  # Redirect to dashboard if already logged in
-
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        remember_me = request.POST.get('remember_me')
 
         try:
             cr.execute("SELECT * FROM register WHERE username = %s", (username,))
@@ -115,9 +134,20 @@ def login_view(request):
             if user:
                 hashed_password = user[14]
                 if check_password(password, hashed_password):
-                    messages.success(request, 'Login successful!')
+                    # Set session
                     request.session['username'] = username
-                    return redirect('dashboard')
+                    
+                    # If remember me is checked, set session expiry to 30 days
+                    if remember_me:
+                        request.session.set_expiry(30 * 24 * 60 * 60)  # 30 days in seconds
+                    else:
+                        request.session.set_expiry(0)  # Session expires when browser closes
+                    
+                    # Redirect to the intended URL if it exists
+                    next_url = request.session.get('next', 'dashboard')
+                    if 'next' in request.session:
+                        del request.session['next']
+                    return redirect(next_url)
                 else:
                     messages.error(request, 'Invalid password. Please try again.')
             else:
@@ -128,82 +158,80 @@ def login_view(request):
 
     return render(request, 'login.html')
 
+# Protected views that require login
 @login_required
 def dashboard(request):
     username = request.session.get('username')
-    if username:
-        cr.execute("SELECT * FROM register WHERE username = %s", (username,))
-        user = cr.fetchone()
+    cr.execute("SELECT * FROM register WHERE username = %s", (username,))
+    user = cr.fetchone()
 
-        if user:
-            context = {
-                'member_id': user[0],
-                'username': user[1],
-                'email': user[2],
-                'name': user[3],
-                'mother_name': user[4],
-                'father_name': user[5],
-                'gender': user[6],
-                'address': f"{user[7]}, {user[8]}, {user[9]}, {user[10]}, {user[11]}",
-                'mobile': user[12],
-                'registration_date': user[15],
-                'photo': user[13]
-            }
-            return render(request, 'dashboard.html', context)
+    if user:
+        context = {
+            'member_id': user[0],
+            'username': user[1],
+            'email': user[2],
+            'name': user[3],
+            'mother_name': user[4],
+            'father_name': user[5],
+            'gender': user[6],
+            'address': f"{user[7]}, {user[8]}, {user[9]}, {user[10]}, {user[11]}",
+            'mobile': user[12],
+            'registration_date': user[15],
+            'photo': user[13]
+        }
+        return render(request, 'dashboard.html', context)
 
     return redirect('login')
+
 @login_required
 def idcard(request):
     username = request.session.get('username')
-    if username:
-        cr.execute("SELECT * FROM register WHERE username = %s", (username,))
-        user = cr.fetchone()
+    cr.execute("SELECT * FROM register WHERE username = %s", (username,))
+    user = cr.fetchone()
 
-        if user:
-            context = {
-                'name': user[3],
-                'father_name': user[5],
-                'mother_name': user[4],
-                'registration_date': user[15],
-                'address': f"{user[7]}, {user[8]}, {user[9]}, {user[10]}, {user[11]}",
-                'mobile': user[12],
-                'photo': user[13],
-                'school': _("अघोर अखाड़ा ज्योतिष पीठ"),
-                'school_address': _("उज्जैन मध्यप्रदेश"),
-                'school_phone': _("फोन: 9691147442")
-            }
-            return render(request, 'card.html', context)
+    if user:
+        context = {
+            'name': user[3],
+            'father_name': user[5],
+            'mother_name': user[4],
+            'registration_date': user[15],
+            'address': f"{user[7]}, {user[8]}, {user[9]}, {user[10]}, {user[11]}",
+            'mobile': user[12],
+            'photo': user[13],
+            'school': _("अघोर अखाड़ा ज्योतिष पीठ"),
+            'school_address': _("उज्जैन मध्यप्रदेश"),
+            'school_phone': _("फोन: 9691147442")
+        }
+        return render(request, 'card.html', context)
 
     return redirect('login')
+
 @login_required
 def profile(request):
     username = request.session.get('username')
-    if username:
-        cr.execute("SELECT * FROM register WHERE username = %s", (username,))
-        user = cr.fetchone()
-        
-        if user:
-            context = {
-                'username': user[1],
-                'name': user[3],
-                'email': user[2],
-                'mobile': user[12],
-                'father_name': user[5],
-                'mother_name': user[4],
-                'gender': user[6],
-                'address': f"{user[7]}, {user[8]}, {user[9]}, {user[10]}, {user[11]}",
-                'registration_date': user[15],
-                'photo': user[13]
-            }
-            return render(request, 'profile.html', context)
+    cr.execute("SELECT * FROM register WHERE username = %s", (username,))
+    user = cr.fetchone()
+    
+    if user:
+        context = {
+            'username': user[1],
+            'name': user[3],
+            'email': user[2],
+            'mobile': user[12],
+            'father_name': user[5],
+            'mother_name': user[4],
+            'gender': user[6],
+            'address': f"{user[7]}, {user[8]}, {user[9]}, {user[10]}, {user[11]}",
+            'registration_date': user[15],
+            'photo': user[13]
+        }
+        return render(request, 'profile.html', context)
 
     return redirect('login')
+
 @login_required
 def edit_profile(request):
     username = request.session.get('username')
-    if not username:
-        return redirect('login')
-
     if request.method == 'POST':
         cr.execute("SELECT * FROM register WHERE username = %s", (username,))
         user = cr.fetchone()
@@ -268,86 +296,82 @@ def edit_profile(request):
 
 
 
-from django.shortcuts import render, get_object_or_404
-from App.models import Certificate
-@login_required
-def certificate_list(request):
-    search_query = request.GET.get('search', '')
-    certificates = Certificate.objects.filter(mobile_number__icontains=search_query) if search_query else None
-    return render(request, 'certificate_list.html', {'certificates': certificates, 'search_query': search_query})
-@login_required
-def certificate_detail(request):
-    mobile_number = request.GET.get('mobile_number')
-    if mobile_number:
-        certificate = get_object_or_404(Certificate, mobile_number=mobile_number)
-        context = {
-            'name': certificate.name,
-            'guardian': certificate.guardian,
-            'area': certificate.area,
-            'workarea': certificate.workarea,
-            'field': certificate.field,
-            'welfare_activity': certificate.welfare_activity,
-            'date': certificate.date,
-            'letter_number': certificate.letter_number
-        }
-        return render(request, 'certificate.html', context)
-    return redirect('certificate_list')
 
 
-
-# views.py
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect
 from django.db.models import Q
+from App.models import Certificate
+
+def certificate_list(request):
+    certificates = []
+    search_query = request.GET.get('search', '')
+    
+    if search_query:
+        # Search only if there's a query
+        certificates = Certificate.objects.filter(
+            mobile_number__icontains=search_query
+        )
+    
+    context = {
+        'certificates': certificates,
+        'search_query': search_query
+    }
+    return render(request, 'certificate_list.html', context)
+
+def certificate(request):
+    mobile_number = request.GET.get('mobile_number')
+    try:
+        certificate = Certificate.objects.get(mobile_number=mobile_number)
+        return render(request, 'certificate.html', {'certificate': certificate})
+    except Certificate.DoesNotExist:
+        return redirect('certificate_list')
+
+
+
+
+
 from App.models import Appointment
 @login_required
 def appointment(request):
-    search_query = request.GET.get('search', '')  # Get search query (mobile number)
-    appointment_id = request.GET.get('id')  # Check if the "view" button is clicked
-    
+    search_query = request.GET.get('search', '')
+    appointment_id = request.GET.get('id')
+
+    # If an ID is provided, show the specific appointment
     if appointment_id:
-        # Show the specific appointment details in appointment.html
         appointment = get_object_or_404(Appointment, id=appointment_id)
         return render(request, 'appointment.html', {'appointment': appointment})
-    
+
+    # If there's a search query, filter appointments
     if search_query:
-        # Filter appointments based on mobile number
         appointments = Appointment.objects.filter(
             Q(mobile_number__icontains=search_query)
         ).order_by('-registration_date')
     else:
-        # If no search query, return an empty list (hide appointments)
         appointments = []
-    
+
     return render(request, 'appointment_list.html', {
         'appointments': appointments,
         'search_query': search_query
     })
 
 
-@login_required
-# Add a new view for downloading
-def appointment_download(request, id):
-    appointment = get_object_or_404(Appointment, id=id)
-    # Your PDF generation logic here
-    return render(request, 'appointment.html', {
-        'appointment': appointment,
-        'download_mode': True
-    })
+
+
+
+
+
+
+
+
 
 
 def servicedetails(request):
     return render(request, 'servicedetails.html')
-
 
 def logout(request):
     if 'username' in request.session:
         del request.session['username']
-    return redirect('home')
-
-
-
-
-
-
-
-
+    messages.success(request, 'You have been successfully logged out.')
+    return redirect('login')
+def apl(request):
+    return render(request, 'Apl.html')

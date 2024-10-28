@@ -10,6 +10,7 @@
     />
     <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png" />
     <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/sidenav.css' %}">
     <style>
       :root {
         --primary-color: #6c5ce7;
@@ -221,6 +222,10 @@
         <div class="nav-item">
           <i class="fas fa-calendar-check"></i>
           <a href="{% url 'appointment' %}">Appointment</a>
+        </div>
+        <div class="nav-item">
+          <i class="fas fa-plus"></i>
+          <a href="{% url 'apl'%}">Apply for Appointment</a>
         </div>
 
         <form action="{% url 'logout' %}" method="post" style="display: inline">

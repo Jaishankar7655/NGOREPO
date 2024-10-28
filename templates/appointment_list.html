@@ -1,267 +1,249 @@
-{% load static  %}
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="hi">
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png">
+    <link rel="icon" href="{% static 'images/logo.png' %}" type="image/png" />
     <title>नियुक्ति पत्र सूची</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;700&display=swap" rel="stylesheet"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+Devanagari:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
+      body {
+        font-family: "Noto Serif Devanagari", serif;
+        background-color: #f5f5f5;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        width: 95%;
+        max-width: 1200px;
+        margin: 20px auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+        font-size: clamp(1.5rem, 4vw, 2.2rem);
+      }
+
+      .search-section {
+        margin: 0 auto 30px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        width: 100%;
+      }
+
+      .search-form {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        width: 100%;
+      }
+
+      .search-input {
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        width: 100%;
+        max-width: 300px;
+        font-family: inherit;
+        font-size: 1em;
+      }
+
+      .search-button {
+        background-color: #2196f3;
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 1em;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .table-container {
+        width: 100%;
+        overflow-x: auto;
+        margin-top: 20px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .certificates-list {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        min-width: 750px;
+      }
+
+      .certificates-list th,
+      .certificates-list td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        white-space: nowrap;
+      }
+
+      .certificates-list th {
+        background-color: #6c5ce7;
+        color: white;
+        font-weight: 500;
+        position: sticky;
+        top: 0;
+      }
+
+      .certificates-list tr:hover {
+        background-color: #f8f9fa;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 8px;
+      }
+
+      .view-button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: white;
+        background-color: #4caf50;
+      }
+
+      .no-results {
+        text-align: center;
+        padding: 30px;
+        color: #666;
+      }
+
+      @media (max-width: 768px) {
         body {
-            font-family: "Noto Serif Devanagari", serif;
-            background-color: #f5f5f5;
-            min-height: 100vh;
-            padding: 20px;
+          padding: 10px;
         }
 
         .container {
-            width: 95%;
-            max-width: 1200px;
-            margin: 20px auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            overflow-x: hidden;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 30px;
-            font-size: clamp(1.5rem, 4vw, 2.2rem);
-            word-wrap: break-word;
+          width: 100%;
+          padding: 15px;
+          margin: 10px auto;
         }
 
         .search-section {
-            margin: 0 auto 30px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            width: 100%;
+          padding: 15px;
         }
 
         .search-form {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            width: 100%;
+          flex-direction: column;
+          align-items: stretch;
         }
 
         .search-input {
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            width: 100%;
-            max-width: 300px;
-            font-family: inherit;
-            font-size: 1em;
-        }
-
-        .search-button {
-            background-color: #2196F3;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 1em;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-        }
-
-        .table-container {
-            width: 100%;
-            overflow-x: auto;
-            margin-top: 20px;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .appointments-list {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            min-width: 750px;
-            display: none;
-        }
-
-        .appointments-list.active {
-            display: table;
-        }
-
-        .appointments-list th,
-        .appointments-list td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-            white-space: nowrap;
-        }
-
-        .appointments-list th {
-            background-color: #6c5ce7;
-            color: white;
-            font-weight: 500;
-            position: sticky;
-            top: 0;
-        }
-
-        .appointments-list tr:hover {
-            background-color: #f8f9fa;
+          max-width: none;
         }
 
         .action-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .view-button, .download-button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 4px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: white;
-            white-space: nowrap;
-            font-size: 0.9em;
+          flex-direction: column;
         }
 
         .view-button {
-            background-color: #4caf50;
+          width: 100%;
+          justify-content: center;
         }
-
-        .download-button {
-            background-color: #ff9f43;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 30px;
-            color: #666;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .container {
-                width: 100%;
-                padding: 15px;
-                margin: 10px auto;
-            }
-
-            .search-section {
-                padding: 15px;
-            }
-
-            .search-form {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .search-input {
-                max-width: none;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .view-button, .download-button {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 10px;
-            }
-
-            .search-section {
-                padding: 10px;
-            }
-
-            .search-button {
-                width: 100%;
-                justify-content: center;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>नियुक्ति पत्र सूची</h1>
-        
-        <div class="search-section">
-            <form method="GET" class="search-form">
-                <input 
-                    type="text" 
-                    name="search" 
-                    placeholder="मोबाइल नंबर से खोजें..." 
-                    class="search-input"
-                    value="{{ search_query }}"
-                />
-                <button type="submit" class="search-button">
-                    <i class="fas fa-search"></i> खोजें
-                </button>
-            </form>
-        </div>
+      <h1>नियुक्ति पत्र सूची</h1>
 
-        <div class="table-container">
-            {% if appointments %}
-            <table class="appointments-list active">
-                <thead>
-                    <tr>
-                        <th>नाम</th>
-                        <th>पद</th>
-                        <th>मोबाइल नंबर</th>
-                        <th>पंजीकरण दिनांक</th>
-                        <th>पत्र क्रमांक</th>
-                        <th>कार्रवाई</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for appointment in appointments %}
-                    <tr>
-                        <td>{{ appointment.name }}</td>
-                        <td>{{ appointment.position }}</td>
-                        <td>{{ appointment.mobile_number }}</td>
-                        <td>{{ appointment.registration_date }}</td>
-                        <td>{{ appointment.letter_number }}</td>
-                        <td class="action-buttons">
-                            <a href="?id={{ appointment.id }}" class="view-button">
-                                <i class="fas fa-eye"></i> देखें
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <div class="no-results">
-                <i class="fas fa-search" style="font-size: 2em; color: #ddd; margin-bottom: 15px; display: block;"></i>
-                <p>कोई परिणाम नहीं मिला</p>
-            </div>
-            {% endif %}
+      <div class="search-section">
+        <form method="GET" class="search-form">
+          <input
+            type="text"
+            name="search"
+            placeholder="मोबाइल नंबर से खोजें..."
+            class="search-input"
+            value="{{ search_query }}"
+          />
+          <button type="submit" class="search-button">
+            <i class="fas fa-search"></i> खोजें
+          </button>
+        </form>
+      </div>
+
+      <div class="table-container">
+        {% if appointments %}
+        <table class="certificates-list">
+          <thead>
+            <tr>
+              <th>नाम</th>
+              <th>पद</th>
+              <th>मोबाइल नंबर</th>
+              <th>पत्र क्रमांक</th>
+              <th>कार्रवाई</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for appointment in appointments %}
+            <tr>
+              <td>{{ appointment.name }}</td>
+              <td>{{ appointment.position }}</td>
+              <td>{{ appointment.mobile_number }}</td>
+              <td>{{ appointment.letter_number }}</td>
+              <td class="action-buttons">
+                <a
+                  href="{% url 'appointment' %}?id={{ appointment.id }}"
+                  class="view-button"
+                >
+                  <i class="fas fa-eye"></i> देखें
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="no-results">
+          <i
+            class="fas fa-search"
+            style="
+              font-size: 2em;
+              color: #ddd;
+              margin-bottom: 15px;
+              display: block;
+            "
+          ></i>
+          <p>कोई परिणाम नहीं मिला</p>
         </div>
+        {% endif %}
+      </div>
     </div>
-</body>
+  </body>
 </html>
