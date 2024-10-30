@@ -9,7 +9,7 @@ SECRET_KEY = 'django-insecure-$l*62_8lzfk75z8)38wf^j8txq*b4al0)c_s$ao232p8coh(%k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['aghorakhadaujjain.com', 'www.aghorakhadaujjain.com']
 
 # Application definition
 INSTALLED_APPS = [
@@ -56,11 +56,11 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ngo',
-        'USER': 'root',  # Replace with your MySQL username
-        'PASSWORD': '',  # Replace with your MySQL password
-        'HOST': 'localhost',  # or your database host
-        'PORT': '3306',  # default MySQL port
+        'NAME': 'u834728860_akhada_ngo',
+        'USER': 'u834728860_ngo',
+        'PASSWORD': 'Akhada@2024',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 

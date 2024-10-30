@@ -14,9 +14,13 @@ from django.db.models import Q
 
 
 # Database connection
-db = mysql.connector.connect(host='localhost', user='root', passwd='', database='ngo')
+db = mysql.connector.connect(
+    host='localhost',
+    user='u834728860_ngo',
+    passwd='Akhada@2024',
+    database='u834728860_akhada_ngo'
+)
 cr = db.cursor()
-
 # Login Required Decorator
 def login_required(view_func):
     @wraps(view_func)
