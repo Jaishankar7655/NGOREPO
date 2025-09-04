@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - django
+    networks:
+      - app-network
+
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - static_volume:/app/static
+      - media_volume:/app/media
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn myproject.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+    env_file:
+      - .env
+    restart: always
+    networks:
+      - app-network
+
+volumes:
+  static_volume:
+  media_volume:
+
+networks:
+  app-network:
+    driver: bridge
